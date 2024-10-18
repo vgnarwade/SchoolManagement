@@ -4,6 +4,11 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from app.models import CustomUser
 from .models import Students, Course, SessionYear
+from hod.models import StudentNotifications
+
+
+def student_home(request):
+    return render(request, "student/studentHome.html")
 
 
 @login_required(login_url="/")
@@ -202,8 +207,23 @@ def delete_session(request, id):
     return redirect("session_list")
 
 
+def view_notifications(request):
+    student = Students.objects.get(admin=request.user.id)
+    # context_ = []
+
+    message = StudentNotifications.objects.filter(student=student.id)
+    context = {"messages": message}
+    # context_.append(message)
+    # print(context_)
+    # context = {"messages":message}
+    return render(request, "student/notifications.html", context)
 
 
+def read_notifications(request, status):
+    notify = StudentNotifications.objects.get(id=status)
+    notify.status = True
+    notify.save()
+    return redirect("view_notifications")
 
 
 

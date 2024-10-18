@@ -19,9 +19,12 @@ urlpatterns = [
     # Url for notifications
     path("view-staff-notifications/", views.notifications_view, name="notifications_viewed"),
     path("read-staff-notification/<str:status>/", views.notifications_read, name="notifications_read"),
-    path("apply-leave/", views.staff_apply_leave, name="staff_apply_leave"),
+    path("apply-staff-leave/", views.staff_apply_leave, name="staff_apply_leave"),
+    path("save-staff-leave/", views.save_staff_leave, name="save_staff_leave"),
 
-
+    # Urls for feedback
+    path("send-feedback/", views.send_feedback, name="send_staff_feedback"),
+    path("save-staff-feedback/", views.save_staff_feedback, name="save_staff_feedback"),
 
 
 ]

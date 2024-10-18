@@ -4,7 +4,7 @@ from django.utils import timezone
 from app.models import CustomUser
 from .models import Staff, Subjects
 from student.models import Course
-from hod.models import StaffNotifications
+from hod.models import StaffNotifications, StaffLeave, StaffFeedback
 
 
 def staff_home(request):
@@ -172,8 +172,44 @@ def notifications_read(request, status):
 
 
 def staff_apply_leave(request):
-    return render(request, "staff/applyLeave.html")
+    staff = Staff.objects.filter(admin=request.user.id)
+    for i in staff:
+        staff_id = i.id
+        leaves = StaffLeave.objects.filter(staff=staff_id)
+        context = {"leaves": leaves}
+        return render(request, "staff/applyLeave.html", context)
 
+
+def save_staff_leave(request):
+    if request.method == "POST":
+        leave_date = request.POST.get("leave_date")
+        message = request.POST.get("message")
+
+        staff = Staff.objects.get(admin=request.user.id)
+
+        leave = StaffLeave(staff=staff, date=leave_date, message=message)
+        leave.save()
+        messages.success(request, "Application submitted successfully !")
+        return redirect("staff_apply_leave")
+
+
+def save_staff_feedback(request):
+    if request.method == "POST":
+        staff_id = Staff.objects.get(admin=request.user.id)
+        feedback = request.POST.get("feedback")
+        new_feedback = StaffFeedback(staff=staff_id, feedback=feedback)
+        new_feedback.save()
+        messages.success(request, "Feedback sent successfully !")
+        return redirect("send_staff_feedback")
+
+
+def send_feedback(request):
+    staff = Staff.objects.filter(admin=request.user.id)
+    for i in staff:
+        staff_id = i.id
+        feedback = StaffFeedback.objects.filter(staff=staff_id)
+        context = {"feedback":feedback}
+        return render(request, "staff/sendFeedback.html", context)
 
 
 
