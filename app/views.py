@@ -25,7 +25,7 @@ def login_page(request):
             elif user_type == "2":
                 return redirect("staff_home")
             else:
-                return HttpResponse("This is STUDENT page.")
+                return redirect("student_home")
         else:
             messages.error(request, "Invalid username or password !!!")
             return redirect("login_page")

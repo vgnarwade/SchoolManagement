@@ -21,5 +21,9 @@ urlpatterns = [
     path("update-session/<int:id>/", views.update_session, name="update_session"),
     path("delete-session/<int:id>/", views.delete_session, name="delete_session"),
 
+    # Student Home Page
+    path("student-home/", views.student_home, name="student_home"),
+    path("view-notifications/", views.view_notifications, name="view_notifications"),
+    path("read-notification/<int:status>/", views.read_notifications, name="read_notifications"),
 
 ]
